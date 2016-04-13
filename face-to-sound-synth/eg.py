@@ -1,6 +1,8 @@
 import time
 import rtmidi
 
+""" basic example. prompts user to select output port; repeatedly sends note to port """
+
 midiout = rtmidi.MidiOut()
 available_ports = midiout.get_ports()
 
@@ -20,7 +22,7 @@ else:
 note_on = [0x90, 60, 112] # channel 1, middle C, velocity 112
 note_off = [0x80, 60, 0]
 
-for i in range(0,100):
+while True:
     midiout.send_message(note_on)
     time.sleep(0.5)
     midiout.send_message(note_off)
@@ -28,4 +30,3 @@ for i in range(0,100):
 
 
 del midiout
-
