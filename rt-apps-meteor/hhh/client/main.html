@@ -5,9 +5,26 @@
 <body>
   <h1>Hungry Hungry Hackers</h1>
   {{> game}}
+  {{> points}}
+  {{> otherPoints}}
 </body>
 
 
 <template name="game">
-  <canvas id="gamecanvas" width="500" height="500"></canvas>
+  <canvas style="float:left" id="gamecanvas" width="400" height="400"></canvas>
+</template>
+
+<template name="points">
+  <h2> Your Score </h2>
+  <p>{{ getPoints }}</p>
+</template>
+
+<template name="otherPoints">
+  <h3> Competitor Scores </h3>
+  <ul>
+    {{#each players}}
+    <li style="color:{{color}}"> {{points}} </li>
+    {{/each}}
+  </ul>
+    
 </template>

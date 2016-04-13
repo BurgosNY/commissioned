@@ -24,8 +24,8 @@ let cleanIdle = function () {
 
 let spawnPellets = function () {
     if (Math.random() > 0.7 && Pellets.find().count() < 30) {
-	Pellets.insert({x: Math.floor(Math.random() * 500),
-			y: Math.floor(Math.random() * 500)});
+	Pellets.insert({x: Math.floor(Math.random() * 400),
+			y: Math.floor(Math.random() * 400)});
     }
 };
 

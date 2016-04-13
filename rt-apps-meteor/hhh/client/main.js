@@ -14,7 +14,7 @@ Template.game.onRendered( function () {
 	let ctx = gamecanvas.getContext('2d');     // get its 2d drawing context
 	
 	ctx.fillStyle = "rgb(45,45,45)";
-	ctx.fillRect(0,0,500,500);
+	ctx.fillRect(0,0,400,400);
 	
 	let players = Players.find().fetch();
 	//    console.log(players.count());
@@ -44,8 +44,8 @@ Template.game.onCreated( () => {
     };
     
     Session.set('playerid', Players.insert({
-	x: Math.round(Math.random() * 500),
-	y: Math.round(Math.random() * 500),
+	x: Math.round(Math.random() * 400),
+	y: Math.round(Math.random() * 400),
 	color: randomColor(),
 	points: 0,
 	lastActive: new Date()
@@ -53,7 +53,7 @@ Template.game.onCreated( () => {
 
 });
 
-const STEP_SIZE = 10;
+const STEP_SIZE = 18;
 
 Template.game.events({
     'click' (event) {
@@ -70,13 +70,12 @@ Template.game.events({
 						  { x : {$lte: newx + 10}},
 						  { y : {$gte: newy - 10}},
 						  { y : {$lte: newy + 10}}]});
-	console.log(gotPellet);
 	if (gotPellet) {
 	    Pellets.remove(gotPellet._id);
 	    Players.update( playerid,
 			    {$set: {x : newx,
 				    y : newy,
-				    points: playerid.points + 1,
+				    points: player.points + 1,
 				    lastActive: new Date()}});
 	    
 	} else {
@@ -90,3 +89,10 @@ Template.game.events({
     }
 });
 
+Template.points.helpers({
+    getPoints () { return Players.findOne(Session.get('playerid')).points;},
+});
+
+Template.otherPoints.helpers({
+    players () { return Players.find({_id: {$not: Session.get('playerid')}})}
+});
