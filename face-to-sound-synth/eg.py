@@ -6,14 +6,17 @@ import rtmidi
 midiout = rtmidi.MidiOut()
 available_ports = midiout.get_ports()
 
-print("which port?")
-print("")
-for (i,port) in zip(range(0, len(available_ports)), available_ports):
-    print(str(i) + ": " + str(port))
+print("number of available ports: " + str(len(available_ports)))
 
-portnum = int(input())
-    
 if available_ports:
+
+    print("which port?")
+    print("")
+    for (i,port) in zip(range(0, len(available_ports)), available_ports):
+        print(str(i) + ": " + str(port))
+
+    portnum = int(input())
+
     midiout.open_port(portnum)
     print("opening port " + str(portnum))
 else:
