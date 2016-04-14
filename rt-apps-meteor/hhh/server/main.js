@@ -2,12 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Players } from '../players.js';
 import { Pellets } from '../pellets.js';
 
-Meteor.startup(() => {
-    spawnPellets();
-});
-
-
-
 const PLAYER_TIMEOUT = 20000;
 
 let cleanIdle = function () {
