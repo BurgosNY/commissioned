@@ -1,5 +1,5 @@
 
-Code listing for [tests4geeks.com](http://tests4geeks.com/blog) post.
+Code listing for a [tests4geeks.com](http://tests4geeks.com/blog) post.
 
 To run the sample, makes sure meteor is installed and do:
 
@@ -13,5 +13,6 @@ meteor
 
 ```
 
-Then navigate to http://localhost:3000 with as many browsers as you can muster!
+Then navigate to [http://localhost:3000](http://localhost:3000) with
+as many browsers as you can muster!
 
