@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Players } from '../players.js';
 import { Pellets } from '../pellets.js';
 
-const PLAYER_TIMEOUT = 20000;
+const PLAYER_TIMEOUT = 60000;
 
 let cleanIdle = function () {
     let now = new Date();

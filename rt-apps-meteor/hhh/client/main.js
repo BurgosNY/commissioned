@@ -58,7 +58,7 @@ Template.game.onCreated( () => {
 
 });
 
-const STEP_SIZE = 18;
+const STEP_SIZE = 22;
 
 let nearbyPelletQuery = function (newp) {
     return { $and: [ { x : {$gte: newp.x - 10}},
