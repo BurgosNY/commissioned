@@ -1,0 +1,60 @@
+<head>
+  <title> glibber - post quickly </title>
+</head>
+
+<body>
+  {{> bannerbar }}
+  {{> contentarea }}
+</body>
+
+<template name="contentarea">
+  {{#if currentUser}}
+  {{> usernav }}
+  {{> postbox }}
+  {{/if}}
+  {{> feed }}
+</template>
+
+<template name="usernav">
+  <p> Your Screename:
+    {{#if currentUser.profile}}
+    <input type=text id="screenname" placeholder="@coolnic"
+	   value="{{currentUser.nick}}" />
+    {{else}}
+    <input type=text id="screenname" placeholder="@coolnic" />
+    {{/if}}
+  </p>
+</template>
+
+<template name="bannerbar">
+  <h1 class="banner">glibber</h1>
+  {{> loginButtons }}
+  {{> searchbox }}
+</template>
+
+<template name="postbox">
+  <div class="postbox frontcenter">
+    <input type=text id="postbox" placeholder="what's up?" />
+  </div>
+</template>
+
+
+<template name="searchbox">
+  <div class="searchbox rightcenter">
+    <p>Search <input type=text id="searchbox" placeholder="#whateverdude" /></p>
+  </div>
+</template>
+
+<template name="feed">
+  {{#if currentUser }}
+  
+  <h3> yur feed </h3>
+  FEED GOES HERE
+  
+  {{else}}
+  
+  <h3> pub feed </h3>
+  PUB FEED HERE
+  
+  {{/if}}
+</template>
