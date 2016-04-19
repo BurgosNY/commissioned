@@ -16,10 +16,8 @@ Template.usernav.events({
 	if (!profile) {
 	    Profiles.insert({ nick:   newNick});
 	} else {
-	    Profiles.update( profile._id,
-			     {$set: {nick: newNick}});
+	    Profiles.update( profile._id, {$set: {nick: newNick}});
 	}
-
     }
 });
 
