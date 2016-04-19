@@ -9,6 +9,7 @@ import { Posts } from '../posts.js';
 
 Meteor.subscribe('profiles');
 
+
 Template.usernav.events({
     'blur #screenname' : (event) => {
 	let profile = Meteor.user().profile();
@@ -21,3 +22,27 @@ Template.usernav.events({
     }
 });
 
+
+Template.feed.onCreated(function () {
+    this.autorun(() => {
+
+	this.subscribe('posts');
+
+    });
+});
+
+Template.feed.helpers({
+    posts () {
+	return Posts.find({}, {sort: {postedAt: -1}}).fetch();
+    }
+});
+
+Template.postbox.events({
+    'submit #postbox' (event) {
+	event.preventDefault();
+	let content = event.target.content.value;
+	event.target.content.value = "";
+	Posts.insert({ content: content});
+    }
+    
+});

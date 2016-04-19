@@ -4,17 +4,17 @@ import { Profiles } from '../profiles.js';
 import { Posts } from '../posts.js';
 
 Profiles.before.insert( (uid, doc) => {
-    doc.createdAt = Date.now();
+    doc.createdAt = new Date(); //Date.now();
     doc.userId = uid;
 });
 
 Profiles.before.update( function (uid, doc, fields, mod, opts) {
     mod.$set = mod.$set || {};
-    mod.$set.changedAt = Date.now();
+    mod.$set.changedAt = new Date(); //Date.now();
 });
 
 Posts.before.insert( function (uid, doc) {
-    doc.postedAt = Date.now();
+    doc.postedAt = new Date(); // Date.now();
     doc.userId = uid;
 });
 
@@ -25,7 +25,7 @@ Meteor.startup(() => {
 });
 
 Meteor.publish('profiles', () => { return Profiles.find(); });
-Posts.publish('posts', () => {return Posts.find();});
+Meteor.publish('posts', () => { return Posts.find(); });
 
 
 
