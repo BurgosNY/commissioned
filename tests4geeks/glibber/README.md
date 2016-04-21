@@ -5,5 +5,5 @@ This directory contains the code listing for an
 The code in this project directory implements an example microblogging
 service called *Glibber*, and it looks like:
 
-[!glibber](chatting.gif)
+![glibber](chatting.gif)
 
