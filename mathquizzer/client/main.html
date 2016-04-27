@@ -3,30 +3,39 @@
 </head>
 
 <body>
+  {{> demoQuiz}}
 </body>
 
-<template name="additionProblem">
-  <table>
+<template name="demoQuiz">
+  {{#each problems}}
+  {{> simpleAddition}}
+  {{/each}}
+
+</template>
+
+<template name="simpleAddition">
+  <div class="problem" id="problem_{{id}}">
+    <table>
     {{#each summands}}
-    {{> numberRow }}
+    {{> numberRow}}
     {{/each}}
-    {{> answerRow answer}}    
-  </table>
+    {{> answerRow id=this.id indexes=(answerIndexes this.answer)}}
+    </table>
+  </div>
 </template>
 
 <template name="numberRow">
   <tr>
-    
-    {{#each digit}}
-    <td>{{this}}</td>
-    {{/each}}
+    {{#each this}}<td>{{this}}</td>{{/each}} 
   </tr>
 </template>
 
 <template name="answerRow">
-  <tr name="answer">
-    {{#each digit}}
-    <td>{{this}}
+  <tr id="answer_{{id}}">
+    {{#each indexes}}
+    <td> <input class="cell neutral"
+		name="idx_{{this}}"
+		type="text" size="1" maxlength="1"/>  </td>
     {{/each}}
   </tr>
 </template>

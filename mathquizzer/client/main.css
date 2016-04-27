@@ -1,1 +1,27 @@
 /* CSS declarations go here */
+
+input.cell {
+    width:10px;
+    border-radius:0px;
+    padding:0;
+    margin:0;
+    border:0;
+}
+
+input.neutral {
+    background: #cacaaa;
+}
+
+input.incorrect {
+    background: #dcaaaa;
+}
+
+input.correct {
+    background: #aadcaa;
+}
+
+td {
+    padding:0;
+    border:0;
+    margin:0;
+}
