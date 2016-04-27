@@ -1,0 +1,32 @@
+<head>
+  <title>unnamed math quiz app</title>
+</head>
+
+<body>
+</body>
+
+<template name="additionProblem">
+  <table>
+    {{#each summands}}
+    {{> numberRow }}
+    {{/each}}
+    {{> answerRow answer}}    
+  </table>
+</template>
+
+<template name="numberRow">
+  <tr>
+    
+    {{#each digit}}
+    <td>{{this}}</td>
+    {{/each}}
+  </tr>
+</template>
+
+<template name="answerRow">
+  <tr name="answer">
+    {{#each digit}}
+    <td>{{this}}
+    {{/each}}
+  </tr>
+</template>
