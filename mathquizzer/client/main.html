@@ -2,26 +2,57 @@
   <title>unnamed math quiz app</title>
 </head>
 
-<body>
-  {{> demoQuiz}}
-</body>
 
 <template name="demoQuiz">
   {{#each problems}}
-  {{> simpleAddition}}
-  {{/each}}
+  
+  <div class="row">
+    <div class="problem" id="problem_{{id}}">
+      
+      {{#if (isSimpleAddition this)}}
+      {{> simpleAddition}}
+      {{/if}}
+      
+      {{#if (isSimpleMultiplication this)}}
+      {{> simpleMultiplication }}
+      {{/if}}
+    </div>
+  </div>
 
+  {{/each}}
+</template>
+
+
+<template name="simpleMultiplication">
+  <div class="col-sm-2"></div>
+  <div class="col-sm-4">
+  <table>
+    {{#each factors }}
+    {{> numberRow }}
+    {{/each}}
+    {{> answerRow id=this.id indexes=(answerIndexes this.answer)}}
+  </table>
+  </div>
+  <div class="col-sm-4">
+    Moo
+  </div>
+  <div class="col-sm-2"></div>  
 </template>
 
 <template name="simpleAddition">
-  <div class="problem" id="problem_{{id}}">
-    <table>
+  <div class="col-sm-2"></div>
+  <div class="col-sm-4">
+  <table>
     {{#each summands}}
     {{> numberRow}}
     {{/each}}
     {{> answerRow id=this.id indexes=(answerIndexes this.answer)}}
-    </table>
+  </table>
   </div>
+  <div class="col-sm-4">
+    goooo
+  </div>
+  <div class="col-sm-2"></div>  
 </template>
 
 <template name="numberRow">
@@ -39,3 +70,10 @@
     {{/each}}
   </tr>
 </template>
+
+
+<body>
+  <div class="container-fluid">
+    {{> demoQuiz}}
+  </div>
+</body>

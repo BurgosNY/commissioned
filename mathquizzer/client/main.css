@@ -3,7 +3,7 @@
 input.cell {
     width:10px;
     border-radius:0px;
-    padding:0;
+    padding:1;
     margin:0;
     border:0;
 }
@@ -24,4 +24,9 @@ td {
     padding:0;
     border:0;
     margin:0;
+}
+
+.problem {
+    margin-top: 80px;
+    margin-bottom: 80px;
 }

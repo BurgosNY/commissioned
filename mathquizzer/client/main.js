@@ -28,6 +28,9 @@ const additionProblem = function (id, summands) {
 	return padLeft(s," ", maxlength+1).split("");
     });
 
+    // for display purposes, add a +
+    digitSummands[digitSummands.length -1][0] = "+";
+    
     let answer = summands.reduce((a,b) => {return a+b;});
     
     return {id: id,
@@ -37,19 +40,59 @@ const additionProblem = function (id, summands) {
 	   };
 };
 
+
+const multiplicationProblem = function (id, factors) {
+
+    let stringFactors = factors.map((s) => {return (s+"");});
+
+    let answer = factors.reduce((a,b) => {return a*b;});
+    let digitAnswer = (answer+"").split("");
+
+    let digitFactors = stringFactors.map((s) => {
+	return padLeft(s, " ", digitAnswer.length).split("");
+    });
+    
+    digitFactors[digitFactors.length -1][0] = "✕";
+
+    return {id: id,
+	    type: "simple multiplication",
+	    factors: digitFactors,
+	    answer: digitAnswer
+	   };
+};
+
 const exampleProblems = [
     additionProblem(0, [3749, 7392, 2027]),
-    additionProblem(1, [174, 2392, 225])
+    additionProblem(1, [174, 2392, 225]),
+    multiplicationProblem(2, [836, 268]),
+    multiplicationProblem(3, [3892, 74])
 ];
 
 
 Template.demoQuiz.helpers({
     problems () {
 	return exampleProblems;
+    },
+
+    isSimpleAddition (doc) {
+	return doc.type === "simple addition";
+    },
+
+    isSimpleMultiplication (doc) {
+	return doc.type === "simple multiplication";
     }
 });
 
 Template.simpleAddition.helpers({
+    answerIndexes (answer) {
+	let idx = [];
+	for (let i = 0; i<answer.length; i+=1) idx.push(i);
+	return idx;
+    }
+});
+
+
+Template.simpleMultiplication.helpers({
     answerIndexes (answer) {
 	let idx = [];
 	for (let i = 0; i<answer.length; i+=1) idx.push(i);
@@ -70,10 +113,8 @@ Template.answerRow.events({
 	let idx = Number(e.target.name.split("_")[1]);
 	let rightAnswer = lookupAnswer(prob, idx);
 	if (rightAnswer == val) {
-	    console.log("goodie");
 	    $(e.target).attr("class", "cell correct");
 	} else {
-	    console.log("oh noes");
 	    $(e.target).attr("class", "cell incorrect");
 	}
     }
