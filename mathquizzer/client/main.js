@@ -12,11 +12,17 @@ const padLeft = function (s,f,w) {
 }
 
 
+const tooltipName = function (n) {
+    return "tooltip_for_problem_" + n;
+};
+
 const rational = function (n,d) {
     return {numerator:n, denominator:d};
 };
 
-const additionProblem = function (id, summands) {
+const additionProblem = function (id, summands, tooltipText) {
+    let tooltip = tooltip || "Did you remember to carry between columns?";
+    
     let stringSummands = summands.map((s) => {return (s+"");});
 
     let maxlength = 0;
@@ -36,13 +42,15 @@ const additionProblem = function (id, summands) {
     return {id: id,
 	    type: "simple addition",
 	    summands: digitSummands,
-	    answer: padLeft(answer+""," ",maxlength+1).split("")
+	    answer: padLeft(answer+""," ",maxlength+1).split(""),
+	    tooltip: tooltip
 	   };
 };
 
 
-const multiplicationProblem = function (id, factors) {
-
+const multiplicationProblem = function (id, factors, tooltipText) {
+    let tooltip = tooltipText || "Did you remember to shift while multiplying the digits in the second factor by the first factor?";
+    
     let stringFactors = factors.map((s) => {return (s+"");});
 
     let answer = factors.reduce((a,b) => {return a*b;});
@@ -57,7 +65,8 @@ const multiplicationProblem = function (id, factors) {
     return {id: id,
 	    type: "simple multiplication",
 	    factors: digitFactors,
-	    answer: digitAnswer
+	    answer: digitAnswer,
+	    tooltip: tooltip
 	   };
 };
 
@@ -68,10 +77,15 @@ const exampleProblems = [
     multiplicationProblem(3, [3892, 74])
 ];
 
+Template.demoQuiz.onCreated(function () {
+    Session.set("currentProblem", 0);
+});
 
 Template.demoQuiz.helpers({
-    problems () {
-	return exampleProblems;
+
+    currentProblem () {
+	let prob = Session.get("currentProblem");
+	return exampleProblems[prob];
     },
 
     isSimpleAddition (doc) {
@@ -80,8 +94,20 @@ Template.demoQuiz.helpers({
 
     isSimpleMultiplication (doc) {
 	return doc.type === "simple multiplication";
+    },
+
+    tooltipOn (id) {
+	return !!Session.get(tooltipName(id));
     }
+
 });
+
+Template.demoQuiz.events({
+    'click #nextButton' : (event) => {
+	console.log("fuck yealllll");
+	Session.set("currentProblem", Session.get("currentProblem")+1);
+    }
+})
 
 Template.simpleAddition.helpers({
     answerIndexes (answer) {
@@ -106,6 +132,8 @@ const lookupAnswer = function (prob, idx) {
     return exampleProblems[prob].answer[idx];
 };
 
+
+
 Template.answerRow.events({
     'keyup': (e) => {
 	let val = e.target.value;
@@ -118,6 +146,7 @@ Template.answerRow.events({
 	    $(prev).focus();
 	} else {
 	    $(e.target).attr("class", "cell incorrect");
+	    Session.set(tooltipName(prob), true);
 	}
     }
 });

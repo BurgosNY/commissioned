@@ -4,11 +4,15 @@
 
 
 <template name="demoQuiz">
-  {{#each problems}}
+  {{#momentum plugin="right-to-left"}}
+
+  {{#with currentProblem}}
   
   <div class="row">
     <div class="problem" id="problem_{{id}}">
-      
+
+      <div class="col-xs-1"></div>
+
       {{#if (isSimpleAddition this)}}
       {{> simpleAddition}}
       {{/if}}
@@ -16,16 +20,35 @@
       {{#if (isSimpleMultiplication this)}}
       {{> simpleMultiplication }}
       {{/if}}
+
+      <div class="col-xs-2">      
+      {{#momentum plugin="fade"}}
+      {{#if (tooltipOn this.id)}}
+
+      <p class="text-center bg-warning">{{tooltip}}</p>
+      {{/if}}
+      {{/momentum}}
+      </div>
+
+      <div class="col-xs-1"></div>
+
+      <div class="col-xs-1">
+	<button id="nextButton"
+		type="button"
+		class="btn btn-default">Next</button>
+      </div>      
+
     </div>
+
   </div>
 
-  {{/each}}
+  {{/with}}
+  {{/momentum}}
 </template>
 
 
 <template name="simpleMultiplication">
-  <div class="col-sm-2"></div>
-  <div class="col-sm-4">
+  <div class="col-xs-3">
   <table>
     {{#each factors }}
     {{> numberRow }}
@@ -33,15 +56,10 @@
     {{> answerRow id=this.id indexes=(answerIndexes this.answer)}}
   </table>
   </div>
-  <div class="col-sm-4">
-    Moo
-  </div>
-  <div class="col-sm-2"></div>  
 </template>
 
 <template name="simpleAddition">
-  <div class="col-sm-2"></div>
-  <div class="col-sm-4">
+  <div class="col-xs-3">
   <table>
     {{#each summands}}
     {{> numberRow}}
@@ -49,10 +67,6 @@
     {{> answerRow id=this.id indexes=(answerIndexes this.answer)}}
   </table>
   </div>
-  <div class="col-sm-4">
-    goooo
-  </div>
-  <div class="col-sm-2"></div>  
 </template>
 
 <template name="numberRow">

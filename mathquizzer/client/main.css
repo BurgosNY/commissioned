@@ -27,6 +27,7 @@ td {
 }
 
 .problem {
-    margin-top: 80px;
-    margin-bottom: 80px;
+    margin: 30px;
+    border: 1px solid black;
 }
+
