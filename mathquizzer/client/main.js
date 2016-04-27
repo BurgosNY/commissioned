@@ -114,6 +114,8 @@ Template.answerRow.events({
 	let rightAnswer = lookupAnswer(prob, idx);
 	if (rightAnswer == val) {
 	    $(e.target).attr("class", "cell correct");
+	    let prev = $(e.target.parentNode).prev().children()[0];
+	    $(prev).focus();
 	} else {
 	    $(e.target).attr("class", "cell incorrect");
 	}
