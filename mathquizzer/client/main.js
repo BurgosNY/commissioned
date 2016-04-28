@@ -21,7 +21,7 @@ const rational = function (n,d) {
 };
 
 const additionProblem = function (id, summands, tooltipText) {
-    let tooltip = tooltip || "Did you remember to carry between columns?";
+    let tooltip = tooltipText || "This is the default suggestion text for addition problems.";
     
     let stringSummands = summands.map((s) => {return (s+"");});
 
@@ -49,7 +49,7 @@ const additionProblem = function (id, summands, tooltipText) {
 
 
 const multiplicationProblem = function (id, factors, tooltipText) {
-    let tooltip = tooltipText || "Did you remember to shift while multiplying the digits in the second factor by the first factor?";
+    let tooltip = tooltipText || "This is the default text for multiplication problems";
     
     let stringFactors = factors.map((s) => {return (s+"");});
 
@@ -72,7 +72,7 @@ const multiplicationProblem = function (id, factors, tooltipText) {
 
 const exampleProblems = [
     additionProblem(0, [3749, 7392, 2027]),
-    additionProblem(1, [174, 2392, 225]),
+    additionProblem(1, [174, 2392, 225], "Here is some custom text"),
     multiplicationProblem(2, [836, 268]),
     multiplicationProblem(3, [3892, 74])
 ];
