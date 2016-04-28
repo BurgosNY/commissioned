@@ -86,7 +86,12 @@ Template.demoQuiz.helpers({
     currentProblem () {
 	let prob = Session.get("currentProblem");
 	return exampleProblems[prob];
-    },
+    }
+
+
+});
+
+Template.showProblem.helpers({
 
     isSimpleAddition (doc) {
 	return doc.type === "simple addition";
@@ -100,12 +105,18 @@ Template.demoQuiz.helpers({
 	return !!Session.get(tooltipName(id));
     }
 
+    
 });
 
 Template.demoQuiz.events({
     'click #nextButton' : (event) => {
-	console.log("fuck yealllll");
 	Session.set("currentProblem", Session.get("currentProblem")+1);
+	var inputs = $('input');
+	for (var i =0; i<inputs.length;i+=1) {
+	    inputs[i].value="";
+	}
+
+	$('input').attr('class', 'cell neutral');
     }
 })
 
@@ -137,8 +148,10 @@ const lookupAnswer = function (prob, idx) {
 Template.answerRow.events({
     'keyup': (e) => {
 	let val = e.target.value;
-	let prob = Number(e.target.parentNode.parentNode.id.split("_")[1]);
-	let idx = Number(e.target.name.split("_")[1]);
+	let keys = e.target.id.split("_");
+	let prob = Number(keys[1]);
+	let idx = Number(keys[2]);
+	
 	let rightAnswer = lookupAnswer(prob, idx);
 	if (rightAnswer == val) {
 	    $(e.target).attr("class", "cell correct");

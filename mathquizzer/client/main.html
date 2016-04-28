@@ -4,11 +4,20 @@
 
 
 <template name="demoQuiz">
-  {{#momentum plugin="right-to-left"}}
 
-  {{#with currentProblem}}
-  
-  <div class="row">
+  {{> showProblem currentProblem}}
+
+
+
+</template>
+
+<template name="noProblem">
+  fuckoff
+</template>
+
+<template name="showProblem">
+
+    <div class="row">
     <div class="problem" id="problem_{{id}}">
 
       <div class="col-xs-1"></div>
@@ -41,9 +50,6 @@
     </div>
 
   </div>
-
-  {{/with}}
-  {{/momentum}}
 </template>
 
 
@@ -77,10 +83,11 @@
 
 <template name="answerRow">
   <tr id="answer_{{id}}">
-    {{#each indexes}}
+    {{#each idx in indexes}}
     <td> <input class="cell neutral"
-		name="idx_{{this}}"
-		type="text" size="1" maxlength="1"/>  </td>
+		id="idx_{{id}}_{{idx}}"
+		value=""
+		type="text" size="1" maxlength="1"/></td>
     {{/each}}
   </tr>
 </template>
