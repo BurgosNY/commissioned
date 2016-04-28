@@ -20,6 +20,11 @@ const rational = function (n,d) {
     return {numerator:n, denominator:d};
 };
 
+const integerToDigitStrings = function (n, padTo) {
+    padTo = padTo || 0;
+    return padLeft(n+""," ",padTo).split("");
+};
+
 const additionProblem = function (id, summands, tooltipText) {
     let tooltip = tooltipText || "This is the default suggestion text for addition problems.";
     
@@ -42,30 +47,39 @@ const additionProblem = function (id, summands, tooltipText) {
     return {id: id,
 	    type: "simple addition",
 	    summands: digitSummands,
-	    answer: padLeft(answer+""," ",maxlength+1).split(""),
+	    answer: [padLeft(answer+""," ",maxlength+1).split("")],
 	    tooltip: tooltip
 	   };
 };
 
 
-const multiplicationProblem = function (id, factors, tooltipText) {
+const multiplicationProblem = function (id, f1,f2, tooltipText) {
     let tooltip = tooltipText || "This is the default text for multiplication problems";
-    
-    let stringFactors = factors.map((s) => {return (s+"");});
 
-    let answer = factors.reduce((a,b) => {return a*b;});
-    let digitAnswer = (answer+"").split("");
-
-    let digitFactors = stringFactors.map((s) => {
-	return padLeft(s, " ", digitAnswer.length).split("");
-    });
+    let digitAnswer = integerToDigitStrings(f1*f2);
+    let padTo = digitAnswer.length;
     
+    let steps = [];
+    let f2String = (f2+"");
+    let rightPad = "";
+    
+    for (let i in f2String) {
+	let d = Number(f2String[f2String.length - i - 1]);
+	let step = integerToDigitStrings( (f1*d) + rightPad, padTo);
+	rightPad += " ";
+	steps.push(step);
+    }
+    console.log(steps);
+    let digitFactors = [integerToDigitStrings(f1, padTo),
+			integerToDigitStrings(f2, padTo)];
     digitFactors[digitFactors.length -1][0] = "✕";
 
+    steps.push(digitAnswer);
+    console.log(steps);
     return {id: id,
 	    type: "simple multiplication",
 	    factors: digitFactors,
-	    answer: digitAnswer,
+	    answer: steps,
 	    tooltip: tooltip
 	   };
 };
@@ -73,8 +87,8 @@ const multiplicationProblem = function (id, factors, tooltipText) {
 const exampleProblems = [
     additionProblem(0, [3749, 7392, 2027]),
     additionProblem(1, [174, 2392, 225], "Here is some custom text"),
-    multiplicationProblem(2, [836, 268]),
-    multiplicationProblem(3, [3892, 74])
+    multiplicationProblem(2, 836, 268),
+    multiplicationProblem(3, 3892, 74, "Or put any tip you like here")
 ];
 
 Template.demoQuiz.onCreated(function () {
@@ -100,7 +114,7 @@ Template.showProblem.helpers({
     isSimpleMultiplication (doc) {
 	return doc.type === "simple multiplication";
     },
-
+    
     tooltipOn (id) {
 	return !!Session.get(tooltipName(id));
     }
@@ -123,29 +137,35 @@ Template.demoQuiz.events({
 Template.simpleAddition.helpers({
     answerIndexes (answer) {
 	let idx = [];
-	for (let i = 0; i<answer.length; i+=1) idx.push(i);
+	for (let i = 0; i<answer[0].length; i+=1) idx.push(i);
 	return idx;
     }
 });
 
 
 Template.simpleMultiplication.helpers({
-    answerIndexes (answer) {
+    stepsIndexes (answer) {
 	let idx = [];
 	for (let i = 0; i<answer.length; i+=1) idx.push(i);
+	return idx;
+    },
+    
+    answerIndexes (answer, step) {
+	let idx = [];
+	for (let i = 0; i<answer[step].length; i += 1) idx.push(i);
 	return idx;
     }
 });
 
 // change lookupAnswer to search for prob with correct id rather than
 // by array index
-const lookupAnswer = function (prob, idx) {
-    return exampleProblems[prob].answer[idx];
+const lookupAnswer = function (prob, step, idx) {
+    return exampleProblems[prob].answer[step][idx];
 };
 
 Template.answerRow.helpers({
-    hasAnswer (id,idx) {
-	let ans = lookupAnswer(Number(id), Number(idx));
+    hasAnswer (id,step,idx) {
+	let ans = lookupAnswer(Number(id), Number(step), Number(idx));
 	return !(ans === " ");
     }
 })
@@ -155,9 +175,10 @@ Template.answerRow.events({
 	let val = e.target.value;
 	let keys = e.target.id.split("_");
 	let prob = Number(keys[1]);
-	let idx = Number(keys[2]);
+	let step = Number(keys[2]);
+	let idx = Number(keys[3]);
 	
-	let rightAnswer = lookupAnswer(prob, idx);
+	let rightAnswer = lookupAnswer(prob, step, idx);
 	if (rightAnswer == val) {
 	    $(e.target).attr("class", "cell correct");
 	    let prev = $(e.target.parentNode).prev().children()[0];

@@ -7,13 +7,8 @@
 
   {{> showProblem currentProblem}}
 
-
-
 </template>
 
-<template name="noProblem">
-  fuckoff
-</template>
 
 <template name="showProblem">
 
@@ -30,10 +25,9 @@
       {{> simpleMultiplication }}
       {{/if}}
 
-      <div class="col-xs-2">      
+      <div class="col-xs-3">      
       {{#momentum plugin="fade"}}
       {{#if (tooltipOn this.id)}}
-
       <p class="text-center bg-warning">{{tooltip}}</p>
       {{/if}}
       {{/momentum}}
@@ -46,31 +40,31 @@
 		type="button"
 		class="btn btn-default">Next</button>
       </div>      
-
     </div>
-
   </div>
 </template>
 
 
 <template name="simpleMultiplication">
-  <div class="col-xs-3">
+  <div class="col-xs-4">
   <table>
     {{#each factors }}
     {{> numberRow }}
     {{/each}}
-    {{> answerRow id=this.id indexes=(answerIndexes this.answer)}}
+    {{#each step in (stepsIndexes this.answer)}}
+    {{> answerRow id=this.id step=step indexes=(answerIndexes this.answer step)}}
+    {{/each}}
   </table>
   </div>
 </template>
 
 <template name="simpleAddition">
-  <div class="col-xs-3">
+  <div class="col-xs-4">
   <table>
     {{#each summands}}
     {{> numberRow}}
     {{/each}}
-    {{> answerRow id=this.id indexes=(answerIndexes this.answer)}}
+    {{> answerRow id=this.id step=0 indexes=(answerIndexes this.answer)}}
   </table>
   </div>
 </template>
@@ -82,12 +76,12 @@
 </template>
 
 <template name="answerRow">
-  <tr id="answer_{{id}}">
+  <tr>
     {{#each idx in indexes}}
     <td>
-      {{#if (hasAnswer id idx)}}
+      {{#if (hasAnswer id step idx)}}
       <input class="cell neutral"
-	     id="idx_{{id}}_{{idx}}"
+	     id="idx_{{id}}_{{step}}_{{idx}}"
 	     value=""
 	     type="text" size="1" maxlength="1"/>
       {{/if}}
