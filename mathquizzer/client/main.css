@@ -30,3 +30,10 @@ td {
     margin-top: 60px;
 }
 
+select {
+    border-radius: 0;
+}
+
+select::-ms-expand {
+    display:none;
+}

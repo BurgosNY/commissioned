@@ -2,11 +2,8 @@
   <title>unnamed math quiz app</title>
 </head>
 
-
 <template name="demoQuiz">
-
   {{> showProblem currentProblem}}
-
 </template>
 
 
@@ -16,15 +13,19 @@
     <div class="problem" id="problem_{{id}}">
 
       <div class="col-xs-1"></div>
-
-      {{#if (isSimpleAddition this)}}
-      {{> simpleAddition}}
-      {{/if}}
-      
-      {{#if (isSimpleMultiplication this)}}
-      {{> simpleMultiplication }}
-      {{/if}}
-
+      <div class="col-xs-4">
+	{{#if (isSimpleAddition this)}}
+	{{> simpleAddition}}
+	{{/if}}
+	
+	{{#if (isSimpleMultiplication this)}}
+	{{> simpleMultiplication }}
+	{{/if}}
+	
+	{{#if (isOrderOfOperations this)}}
+	{{> orderOfOperations }}
+	{{/if}}
+      </div>
       <div class="col-xs-3">      
       {{#momentum plugin="fade"}}
       {{#if (tooltipOn this.id)}}
@@ -45,8 +46,39 @@
 </template>
 
 
+<template name="orderOfOperations">
+  <p>{{problemStatement}}</p>
+  {{#each step in steps}}
+  {{> operatorStep id=this.id step=step}}
+  {{/each}}
+</template>
+
+<template name="operatorStep">
+  <ul class="list-inline">
+    {{#each field in step}}
+    <li> 
+      {{#if (isOperator field)}}
+      <select class="cell neutral">
+	<option> </option>
+	<option>+</option>
+	<option>-</option>
+	<option>✕</option>
+	<option>÷</option>
+      </select>
+      {{else}}
+      <input class="cell neutral"
+	     type="text"
+	     value=""
+	     size="1"
+	     maxlength="1">
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+</template>
+
 <template name="simpleMultiplication">
-  <div class="col-xs-4">
+
   <table>
     {{#each factors }}
     {{> numberRow }}
@@ -55,18 +87,18 @@
     {{> answerRow id=this.id step=step indexes=(answerIndexes this.answer step)}}
     {{/each}}
   </table>
-  </div>
+
 </template>
 
 <template name="simpleAddition">
-  <div class="col-xs-4">
+
   <table>
     {{#each summands}}
     {{> numberRow}}
     {{/each}}
     {{> answerRow id=this.id step=0 indexes=(answerIndexes this.answer)}}
   </table>
-  </div>
+
 </template>
 
 <template name="numberRow">

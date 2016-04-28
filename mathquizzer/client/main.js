@@ -5,12 +5,10 @@ import './main.html';
 
 const padLeft = function (s,f,w) {
     var x = s;
-    while (x.length < w) {
+    while (x.length < w) 
 	x = f + x;
-    }
     return x;
 }
-
 
 const tooltipName = function (n) {
     return "tooltip_for_problem_" + n;
@@ -84,11 +82,28 @@ const multiplicationProblem = function (id, f1,f2, tooltipText) {
 	   };
 };
 
+const orderOfOperationProblem = function (id, prob, exp, ttt) {
+    let tooltip = ttt || "Default hint text for order of operations problems.";
+    return {id : id,
+	    type: "order of operations",
+	    problemStatement: prob,
+	    steps: exp,
+	    tooltip: tooltip
+	   };
+};
+
+
 const exampleProblems = [
     additionProblem(0, [3749, 7392, 2027]),
     additionProblem(1, [174, 2392, 225], "Here is some custom text"),
     multiplicationProblem(2, 836, 268),
-    multiplicationProblem(3, 3892, 74, "Or put any tip you like here")
+    multiplicationProblem(3, 3892, 74, "Or put any tip you like here"),
+    orderOfOperationProblem(4,"120 ÷ 5 - 2 ✕ 8",
+			    [["24","-","16"], ["8"]]),
+
+    orderOfOperationProblem(5, "17 - 5 + 2 ✕ 3",
+			    [["12", "+", "6"],["18"]])			    
+	
 ];
 
 Template.demoQuiz.onCreated(function () {
@@ -113,6 +128,10 @@ Template.showProblem.helpers({
 
     isSimpleMultiplication (doc) {
 	return doc.type === "simple multiplication";
+    },
+
+    isOrderOfOperations (doc) {
+	return doc.type === "order of operations";
     },
     
     tooltipOn (id) {
@@ -187,5 +206,11 @@ Template.answerRow.events({
 	    $(e.target).attr("class", "cell incorrect");
 	    Session.set(tooltipName(prob), true);
 	}
+    }
+});
+
+Template.operatorStep.helpers({
+    isOperator (f) {
+	return f === "+" || f === "-" || f === "✕" || f === "÷";
     }
 });
