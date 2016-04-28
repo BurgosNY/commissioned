@@ -143,7 +143,12 @@ const lookupAnswer = function (prob, idx) {
     return exampleProblems[prob].answer[idx];
 };
 
-
+Template.answerRow.helpers({
+    hasAnswer (id,idx) {
+	let ans = lookupAnswer(Number(id), Number(idx));
+	return !(ans === " ");
+    }
+})
 
 Template.answerRow.events({
     'keyup': (e) => {

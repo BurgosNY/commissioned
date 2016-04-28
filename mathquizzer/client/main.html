@@ -84,10 +84,14 @@
 <template name="answerRow">
   <tr id="answer_{{id}}">
     {{#each idx in indexes}}
-    <td> <input class="cell neutral"
-		id="idx_{{id}}_{{idx}}"
-		value=""
-		type="text" size="1" maxlength="1"/></td>
+    <td>
+      {{#if (hasAnswer id idx)}}
+      <input class="cell neutral"
+	     id="idx_{{id}}_{{idx}}"
+	     value=""
+	     type="text" size="1" maxlength="1"/>
+      {{/if}}
+    </td>
     {{/each}}
   </tr>
 </template>
