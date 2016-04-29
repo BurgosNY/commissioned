@@ -19,7 +19,7 @@ class Main extends Sprite {
 
   private function initQuiz () {
     quiz = [];
-    quiz.push( new AdditionProblem( errorLog, [1,2,3] ) );
+    quiz.push( new AdditionProblem( errorLog, [123,234,345] ) );
     addChild(quiz[0]);
   }
 	
