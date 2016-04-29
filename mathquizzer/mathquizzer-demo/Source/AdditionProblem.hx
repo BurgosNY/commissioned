@@ -21,9 +21,9 @@ class AdditionProblem extends QuizProblem {
   private static var DROPSPOT_WIDTH = 50;
 
   private static var OVER_DROP_SPOT_COLOR = 0x777777;
-  private static var OFF_DROP_SPOT_COLOR = 0x0FFFFF;
-  private static var CORRECT_DROP_SPOT_COLOR = 0xDDEADD;
-  private static var INCORRECT_DROP_SPOT_COLOR = 0xEADDDD;
+  private static var OFF_DROP_SPOT_COLOR = 0xFFFFFF;
+  private static var CORRECT_DROP_SPOT_COLOR = 0xAAFFAA;
+  private static var INCORRECT_DROP_SPOT_COLOR = 0xFFAAAA;
   
   var checkMap : Map<Sprite, DropSpotInfo>;
   var carryover : Array<Int>;
@@ -94,13 +94,15 @@ class AdditionProblem extends QuizProblem {
     
     var addDigitDisplay = function (i, j) {
       var ds = new Sprite();
-      ds.graphics.beginFill(0xF0F0F0);
+      ds.graphics.beginFill(OFF_DROP_SPOT_COLOR);
       ds.graphics.drawRect( 0, 0, DROPSPOT_WIDTH, DROPSPOT_HEIGHT);
       ds.graphics.endFill();
       ds.x = DROPSPOT_WIDTH * j;
       ds.y = DROPSPOT_HEIGHT * i + verticalDisplacement;
 
       var dstxt = new TextField();
+      dstxt.width = ds.width;
+      dstxt.height = ds.height;
       dstxt.defaultTextFormat = digitFormat;
       dstxt.text = stringSummands[i][j];
 
@@ -119,6 +121,7 @@ class AdditionProblem extends QuizProblem {
     var initDropSpot = function (ex : Int, er: String, h: Int, v : Float) {
       
       var ds = new Sprite();
+      //      ds.graphics.lineStyle(1,0);
       ds.graphics.beginFill(OFF_DROP_SPOT_COLOR);
       ds.graphics.drawRect(0,0,DROPSPOT_WIDTH, DROPSPOT_HEIGHT);
       ds.graphics.endFill();
@@ -137,7 +140,13 @@ class AdditionProblem extends QuizProblem {
     
     for (i in 0...(this.answer.length))
       initDropSpot(this.answer[i], "summ error",i, 
-		   DROPSPOT_HEIGHT * (summands.length + 2));
+		   DROPSPOT_HEIGHT * (summands.length + 2) + 20);
+
+    
+    graphics.lineStyle(4,0);
+    graphics.moveTo(0, DROPSPOT_HEIGHT * (summands.length + 2) + 10);
+    graphics.lineTo((widestNumber +1) * DROPSPOT_WIDTH, DROPSPOT_HEIGHT * (summands.length + 2) + 10);
+		    
     
   }
 
@@ -166,6 +175,9 @@ class AdditionProblem extends QuizProblem {
 
 	} else {
 
+	  drg.x = (ds.x + (ds.width - drg.width) / 2);
+	  drg.y = (ds.y + (ds.height - drg.height) / 2);
+	  
 	  var info = checkMap.get( ds );
 
 	  if (info != null) {
@@ -193,7 +205,8 @@ class AdditionProblem extends QuizProblem {
     for (ds in checkMap.keys()) dropspots.push(ds);
     
     for (i in 0...10) {
-      var nf = new NumberFactory(dropspots, i, this, overds, offds, ond(i),
+      var nf = new NumberFactory(dropspots, i, this,
+				 overds, offds, ond(i),
 				 DRAGGABLE_WIDTH,
 				 DRAGGABLE_HEIGHT);
 

@@ -23,6 +23,9 @@ class NumberFactory extends Sprite {
     graphics.lineStyle(2.0,0);
     graphics.drawRect(0,0,w,h);
     var numtext = new TextField();
+    //    numtext.border = true;
+    numtext.width = this.width;
+    numtext.height = this.height;
     numtext.selectable = false;
     numtext.defaultTextFormat = format;
     numtext.text = Std.string( i );
@@ -36,6 +39,10 @@ class NumberFactory extends Sprite {
 	num.graphics.drawRect(0,0, w, h);
 	var tf = new TextField();
 	tf.selectable = false;
+	tf.width = num.width;
+	tf.height = num.height;
+	//	tf.border = true;
+
 	tf.defaultTextFormat = format;
 	tf.text = Std.string(i);
 	num.addChild(tf);
