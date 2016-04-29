@@ -25,6 +25,7 @@ class NumberFactory extends Sprite {
     graphics.lineStyle(2.0,0);
     graphics.drawRect(0,0,w,h);
     var numtext = new TextField();
+    numtext.selectable = false;
     numtext.defaultTextFormat = format;
     numtext.text = Std.string( i );
     addChild( numtext );
@@ -35,12 +36,16 @@ class NumberFactory extends Sprite {
 	num.graphics.lineStyle(2.0, 0);
 	num.graphics.drawRect(0,0, w, h);
 	var tf = new TextField();
+	tf.selectable = false;
 	tf.defaultTextFormat = format;
 	tf.text = Std.string(i);
 	num.addChild(tf);
 	tf.x = (num.width - tf.width) / 2;
 
+	num.x = this.x;
+	num.y = this.y;
 	container.addChild( num );
+	
 	num.forceDragging();
       });
 

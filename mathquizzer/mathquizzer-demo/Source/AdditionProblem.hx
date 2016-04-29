@@ -30,7 +30,7 @@ class AdditionProblem extends QuizProblem {
     checkMap = new Map();    
 
     graphics.lineStyle(1.0, 0);
-    graphics.drawRect(0,0,500,500);
+    graphics.drawRect(0,0,10 * DRAGGABLE_WIDTH, 500);
     
     initNumberFactory();
 
@@ -84,16 +84,17 @@ class AdditionProblem extends QuizProblem {
 	}
       };
     };
+
+    for (i in 0...10) {
+      var nf = new NumberFactory(i, this, overds, offds, ond(i),
+				 DRAGGABLE_WIDTH,
+				 DRAGGABLE_HEIGHT);
+
+      nf.x = i * DRAGGABLE_WIDTH;
+      addChild( nf );
+
+    }
     
-    var numberFactoryWidget1 = new NumberFactory(1, this, overds, offds, ond(1),
-						 DRAGGABLE_WIDTH,
-						 DRAGGABLE_HEIGHT);
-    
-    addChild( numberFactoryWidget1 );
-    // numberFactoryWidget.container = this;
-    // numberFactoryWidget.overDropspot = ovds;
-    // numberFactoryWidget.offDropspot = ofds;
-    // numberFactoryWidget.onDropMaker = ond;
   }
   
 }
