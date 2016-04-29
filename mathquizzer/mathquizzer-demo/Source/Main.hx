@@ -19,7 +19,8 @@ class Main extends Sprite {
 
   private function initQuiz () {
     quiz = [];
-    quiz.push( new AdditionProblem( errorLog, [123,234,345] ) );
+    quiz.push( new AdditionProblem( errorLog, [7543, 3235] ));
+    quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
     addChild(quiz[0]);
     quiz[0].x = (stage.stageWidth - quiz[0].width) / 2;
   }

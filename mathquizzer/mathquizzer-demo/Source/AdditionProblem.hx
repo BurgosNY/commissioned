@@ -9,7 +9,8 @@ using Lambda;
 
 typedef DropSpotInfo = {
  expects : Option<Int>,
- error : String
+ error : String,
+ filled: Option<Sprite>
 };
 
 class AdditionProblem extends QuizProblem {
@@ -129,7 +130,7 @@ class AdditionProblem extends QuizProblem {
       ds.x = h*DROPSPOT_WIDTH;
       ds.y = v;
 
-      checkMap.set(ds, {expects: Some(ex), error: er});
+      checkMap.set(ds, {expects: Some(ex), error: er, filled:None});
 
       addChild(ds);
       
@@ -160,11 +161,23 @@ class AdditionProblem extends QuizProblem {
     }
     
     var overds = function (drg, ds) {
-      fillDsWith( ds, OVER_DROP_SPOT_COLOR);
+
+      // assuming non-null lookup
+      switch (checkMap.get( ds ).filled) {
+      case None: fillDsWith( ds, OVER_DROP_SPOT_COLOR);
+      default: {}
+      }
     };
 
     var offds = function (drg, ds) {
-      fillDsWith( ds, OFF_DROP_SPOT_COLOR);
+      var info = checkMap.get( ds );
+      switch (info.filled) {
+      case None: fillDsWith( ds, OFF_DROP_SPOT_COLOR);
+      case Some(filler): if (filler == drg) {
+	  info.filled = None;
+	  fillDsWith( ds, OFF_DROP_SPOT_COLOR);
+	}
+      }
     };
 
     var ond = function (i : Int) {
@@ -179,9 +192,17 @@ class AdditionProblem extends QuizProblem {
 	  drg.y = (ds.y + (ds.height - drg.height) / 2);
 	  
 	  var info = checkMap.get( ds );
-
+	  //	  info.filled = Some( drg );
 	  if (info != null) {
 
+	    switch (info.filled) {
+	    case None: info.filled = Some( drg );
+	    case Some( sprt): {
+	      sprt.parent.removeChild( sprt );
+	      info.filled = Some( drg);
+	    }
+	    }
+	    
 	    switch (info.expects) {
 
 	    case None: {
