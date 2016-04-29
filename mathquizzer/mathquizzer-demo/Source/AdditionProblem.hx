@@ -41,7 +41,7 @@ class AdditionProblem extends QuizProblem {
     initSolution(summands);
     initProblemDisplay(summands);
 
-    initNumberFactory();	// must com last, relies on checkMap being filled
+    initNumberFactory();  // must com last, relies on checkMap being filled
 
   }
 
@@ -140,7 +140,7 @@ class AdditionProblem extends QuizProblem {
       initDropSpot(this.carryover[i], "carryover error", i, DROPSPOT_HEIGHT);
     
     for (i in 0...(this.answer.length))
-      initDropSpot(this.answer[i], "summ error",i, 
+      initDropSpot(this.answer[i], "sum error",i, 
 		   DROPSPOT_HEIGHT * (summands.length + 2) + 20);
 
     
