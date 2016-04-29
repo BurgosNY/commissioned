@@ -5,8 +5,6 @@ import haxe.ds.Option;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 
-
-
 using Lambda;
 
 typedef DropSpotInfo = {
@@ -23,11 +21,14 @@ class AdditionProblem extends QuizProblem {
   private static var DROPSPOT_WIDTH = 50;
 
   private static var OVER_DROP_SPOT_COLOR = 0x777777;
-  private static var OFF_DROP_SPOT_COLOR = 0xFFFFFF;
+  private static var OFF_DROP_SPOT_COLOR = 0x0FFFFF;
   private static var CORRECT_DROP_SPOT_COLOR = 0xDDEADD;
   private static var INCORRECT_DROP_SPOT_COLOR = 0xEADDDD;
   
   var checkMap : Map<Sprite, DropSpotInfo>;
+  var carryover : Array<Int>;
+  var answer : Array<Int>;
+
   
   public function new (el : ErrorLog, summands : Array<Int>) {
     super(el);
@@ -35,14 +36,44 @@ class AdditionProblem extends QuizProblem {
 
     graphics.lineStyle(1.0, 0);
     graphics.drawRect(0,0,10 * DRAGGABLE_WIDTH, 500);
-    
-    initNumberFactory();
 
-    initDropSpots(summands);
+    initSolution(summands);
+    initProblemDisplay(summands);
+
+    initNumberFactory();	// must com last, relies on checkMap being filled
+
+  }
+
+  private function initSolution (summands : Array<Int>) {
+    var widestNumber = 0;
+
+    var alldigits = summands.map(function (n) {
+	var d = Util.digits(n);
+	widestNumber = Std.int(Math.max(widestNumber, d.length));
+	return d;
+      });
+
+    widestNumber += 1;
+    
+    this.carryover = Util.padLeft([],0, widestNumber);
+    this.answer = Util.padLeft([],0,widestNumber);
+
+    for (d in alldigits) Util.padLeft( d, 0, widestNumber);
+
+    for (i in 0...widestNumber) {
+      var digitSum = carryover[(widestNumber - 1) - i];
+      for (j in 0...(alldigits.length))
+	digitSum += alldigits[j][(widestNumber - 1) - i];
+
+      this.carryover[(widestNumber-1) - (i+1)] = Std.int(Math.floor(digitSum/10));
+      this.answer[(widestNumber - 1) - i] = digitSum % 10;
+    }
+
   }
 
 
-  private function initDropSpots (summands : Array<Int>) {
+  
+  private function initProblemDisplay (summands : Array<Int>) {
     var widestNumber = 0;
 
     var stringSummands = summands.map(function (s) {
@@ -59,7 +90,7 @@ class AdditionProblem extends QuizProblem {
     digitFormat.size = 40;
     digitFormat.color = 0;
 
-    var verticalDisplacement = DRAGGABLE_HEIGHT * 2;
+    var verticalDisplacement = DROPSPOT_HEIGHT * 2;
     
     var addDigitDisplay = function (i, j) {
       var ds = new Sprite();
@@ -80,14 +111,34 @@ class AdditionProblem extends QuizProblem {
       addChild(ds);
     };
 
-    trace(stringSummands);
-
     for (i in 0...(stringSummands.length))
       for (j in 0...(stringSummands[i].length)) {
 	addDigitDisplay(i, j);
       }
-	
 
+    var initDropSpot = function (ex : Int, er: String, h: Int, v : Float) {
+      
+      var ds = new Sprite();
+      ds.graphics.beginFill(OFF_DROP_SPOT_COLOR);
+      ds.graphics.drawRect(0,0,DROPSPOT_WIDTH, DROPSPOT_HEIGHT);
+      ds.graphics.endFill();
+
+      ds.x = h*DROPSPOT_WIDTH;
+      ds.y = v;
+
+      checkMap.set(ds, {expects: Some(ex), error: er});
+
+      addChild(ds);
+      
+    };
+    
+    for (i in 0...(this.carryover.length))
+      initDropSpot(this.carryover[i], "carryover error", i, DROPSPOT_HEIGHT);
+    
+    for (i in 0...(this.answer.length))
+      initDropSpot(this.answer[i], "summ error",i, 
+		   DROPSPOT_HEIGHT * (summands.length + 2));
+    
   }
 
   private function initNumberFactory () {
@@ -138,8 +189,11 @@ class AdditionProblem extends QuizProblem {
       };
     };
 
+    var dropspots = [];
+    for (ds in checkMap.keys()) dropspots.push(ds);
+    
     for (i in 0...10) {
-      var nf = new NumberFactory(i, this, overds, offds, ond(i),
+      var nf = new NumberFactory(dropspots, i, this, overds, offds, ond(i),
 				 DRAGGABLE_WIDTH,
 				 DRAGGABLE_HEIGHT);
 

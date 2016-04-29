@@ -11,13 +11,11 @@ class NumberFactory extends Sprite {
   public var container : Sprite; // usually the parent, but allows
 				 // reference before this is added to
 				 // parent.
-  // public var overDropspot : Sprite -> Sprite -> Void;
-  // public var offDropspot : Sprite -> Sprite -> Void;
-  // public var onDropMaker : Int -> (Sprite -> Sprite -> Void);
-  
-  public function new (i : Int, container, overds, offds, ondrop, w, h) {
-    super();
+  public var dropspots : Array<Sprite>;
 
+  public function new (ds : Array<Sprite>, i : Int, container, overds, offds, ondrop, w, h) {
+    super();
+    dropspots = ds;
     var format = new TextFormat();
     format.size = 40;
     format.color = 0;
@@ -33,6 +31,7 @@ class NumberFactory extends Sprite {
     
     addEventListener(MouseEvent.MOUSE_DOWN, function (e) {
 	var num = new Draggable( overds, offds, ondrop );
+	for (ds in dropspots) num.registerDropSpot( ds );
 	num.graphics.lineStyle(2.0, 0);
 	num.graphics.drawRect(0,0, w, h);
 	var tf = new TextField();
@@ -48,9 +47,8 @@ class NumberFactory extends Sprite {
 	
 	num.forceDragging();
       });
-
-    
-    
   }
 
+
+  
 }
