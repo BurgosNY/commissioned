@@ -58,7 +58,6 @@ class Main extends Sprite {
   private function centerInStage( s : Sprite) {
     s.x = (stage.stageWidth - s.width) / 2;
     s.y = (stage.stageHeight - s.height) / 2;
-
   }
   
   private function addNextButton () {
@@ -73,7 +72,6 @@ class Main extends Sprite {
 	quizIndex += 1;
 	loadProblem();
       });
-
 
     var format = new TextFormat();
     format.size = 28;
@@ -102,6 +100,9 @@ class Main extends Sprite {
     quiz.push( new AdditionProblem( errorLog, [7543, 3235] ));
     quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
 
+
+    Util.randomize( quiz );
+    
     addChild(quiz[0]);
     centerInStage(quiz[0]);
   }
