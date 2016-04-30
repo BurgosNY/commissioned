@@ -96,10 +96,24 @@ class Main extends Sprite {
   
   private function initQuiz () {
     quiz = [];
-    quiz.push( new AdditionProblem( errorLog, [3321,4531,32] ));    
-    quiz.push( new AdditionProblem( errorLog, [7543, 3235] ));
-    quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
-
+    // quiz.push( new AdditionProblem( errorLog, [3321,4531,32] ));    
+    // quiz.push( new AdditionProblem( errorLog, [7543, 3235] ));
+    // quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
+    quiz.push( new MultipleChoice( errorLog,
+				   [{dispText: "option1",
+					 isCorrect: false,
+					 helpMessage: "Do better!",
+					 diagnosticMessage: "Errortype1"},
+				     {dispText: "option2",
+					 isCorrect: true,
+					 helpMessage: "",
+					 diagnosticMessage: ""},
+				     {dispText: "option3",
+					 isCorrect: false,
+					 helpMessage: "get it right next time",
+					 diagnosticMessage: "errortype2"}
+				     ],
+				   "This is a test"));
 
     Util.randomize( quiz );
     
