@@ -146,7 +146,7 @@ class MultipleChoice extends QuizProblem {
 	    button.graphics.beginFill(0xAAFFAA);
 	    button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
 	    button.graphics.endFill();
-	    new Toast(spec.helpMessage, stage);
+	    //	    new Toast(spec.helpMessage, stage);
 	  } else if (!beenClicked) {
 	    new Toast(spec.helpMessage, stage);	    
 	    this.errorLog.report( spec.diagnosticMessage );
