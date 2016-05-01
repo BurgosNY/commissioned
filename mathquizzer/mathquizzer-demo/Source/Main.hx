@@ -11,7 +11,7 @@ class Main extends Sprite {
   var errorLog : ErrorLog;
   var quiz : Array<QuizProblem>;
   var quizIndex : Int = 0;
-  var nxtbutton : Sprite;
+  var nextButton : Sprite;
   
   public function new () {
     super ();
@@ -28,7 +28,7 @@ class Main extends Sprite {
       centerInStage(quiz[quizIndex]);
     }
     if (quizIndex >= quiz.length) {
-      removeChild(nxtbutton);
+      removeChild(nextButton);
       generateErrorsReport();
     }
   }
@@ -90,7 +90,7 @@ class Main extends Sprite {
     nb.y = stage.stageHeight / 2;
     
     addChild(nb);
-    nxtbutton = nb;
+    nextButton = nb;
   }
 
   
@@ -99,21 +99,22 @@ class Main extends Sprite {
     // quiz.push( new AdditionProblem( errorLog, [3321,4531,32] ));    
     // quiz.push( new AdditionProblem( errorLog, [7543, 3235] ));
     // quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
+
     quiz.push( new MultipleChoice( errorLog,
-				   [{dispText: "option1",
+				   [{dispText: "option1\nmore on option 1\nmore",
 					 isCorrect: false,
 					 helpMessage: "Do better!",
 					 diagnosticMessage: "Errortype1"},
 				     {dispText: "option2",
-					 isCorrect: true,
-					 helpMessage: "",
-					 diagnosticMessage: ""},
-				     {dispText: "option3",
-					 isCorrect: false,
-					 helpMessage: "get it right next time",
-					 diagnosticMessage: "errortype2"}
+				     	 isCorrect: true,
+				     	 helpMessage: "",
+				     	 diagnosticMessage: ""},
+				     {dispText: "option3\nmore\nmore more",
+				     	 isCorrect: false,
+				     	 helpMessage: "get it right next time",
+				     	 diagnosticMessage: "errortype2"}
 				     ],
-				   "This is a test"));
+				   "This is a test", false, true));
 
     Util.randomize( quiz );
     

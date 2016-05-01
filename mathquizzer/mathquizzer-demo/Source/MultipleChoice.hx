@@ -25,7 +25,7 @@ class MultipleChoice extends QuizProblem {
   var choiceList : Sprite;
     
   public function new (el : ErrorLog, choices: Choices,
-		       prompt : String, ?filename = false) {
+		       prompt : String, ?filename = false, ?horiz = false) {
 
     super( el );
     this.choices = choices;
@@ -36,7 +36,7 @@ class MultipleChoice extends QuizProblem {
 
     addChild( problemPrompt );
     
-    buildChoiceList();
+    buildChoiceList(horiz);
     
   }
 
@@ -62,36 +62,74 @@ class MultipleChoice extends QuizProblem {
    
   }
 
-  private function buildChoiceList () {
+  private function buildChoiceList (?horiz = false) {
     choiceList = new Sprite();
 
     var format = new TextFormat();
     format.size = 20;
     format.color = 0;
 
+    var buttons = [];
+
+    var textElements = [];
+    for (spec in choices) {
+      var tf = new TextField();
+      tf.autoSize = openfl.text.TextFieldAutoSize.LEFT;
+      tf.multiline = true;
+      tf.defaultTextFormat = format;
+      tf.text = spec.dispText;
+      textElements.push(tf);
+    }
+
+    var maxWidth = 0.0;
+    var maxHeight = 0.0;
+
+    for (tf in textElements) {
+      maxWidth = Math.max(tf.width, maxWidth);
+      maxHeight = Math.max(tf.height, maxHeight);
+    }
+    
+    
     var choiceButton = function (i : Int) {
       var button = new Sprite();
-      button.graphics.beginFill(0xffffff);
-      button.graphics.drawRect(0,0,problemPrompt.width, 35);
-      button.graphics.endFill();
-
+      buttons.push( button );
+      
       var beenClicked = false;
       var isClicked = false;
       
       var spec = choices[i];
-      var tf = new TextField();
-      tf.width = button.width;
-      tf.height = button.height;
-      tf.defaultTextFormat = format;
-      tf.text = spec.dispText;
+      // var tf = new TextField();
+      // tf.autoSize = openfl.text.TextFieldAutoSize.LEFT;
+      // tf.multiline = true;
+      // tf.defaultTextFormat = format;
+      // tf.text = spec.dispText;
 
-      button.addChild(tf);
-      button.y = button.height * i;
+      // button.width = tf.width;
+      // button.height = tf.height;
+
+      button.graphics.beginFill(0xffffff);
+      //      button.graphics.drawRect( 0, 0, button.width, button.height);
+      button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
+      button.graphics.endFill();
+      
+      
+      button.addChild( textElements[i] );
+      
+      if (i > 0) 
+      	for (j in 0...i)
+      	  if (horiz) {
+      	    button.x += (maxWidth + 4);
+      	  } else {
+      	    button.y += (maxHeight + 4);
+      	  }
+      
+
       
       button.addEventListener( MouseEvent.MOUSE_OVER, function (e) {
 	  if (!isClicked) {
 	    button.graphics.beginFill(0xdddddd); // MAGIC NUMBER!!:(
-	    button.graphics.drawRect(0,0,problemPrompt.width, 35);
+	    button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
+	    //	    button.graphics.drawRect(0,0,button.width, button.height);
 	    button.graphics.endFill();
 	  }
 	});
@@ -100,7 +138,8 @@ class MultipleChoice extends QuizProblem {
       button.addEventListener( MouseEvent.MOUSE_OUT, function (e) {
 	  if (!isClicked) {
 	    button.graphics.beginFill(0xffffff); // MAGIC NUMBER :(
-	    button.graphics.drawRect(0,0,problemPrompt.width, 35);
+	    button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
+	    //	    button.graphics.drawRect(0,0,button.width, button.height);
 	    button.graphics.endFill();
 	  }
 	});
@@ -110,7 +149,8 @@ class MultipleChoice extends QuizProblem {
 	  if (spec.isCorrect) {
 	    isClicked = true;	// don't let unclicking of correct answers.
 	    button.graphics.beginFill(0xAAFFAA);
-	    button.graphics.drawRect(0,0,button.width,button.height);
+	    button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
+	    //	    button.graphics.drawRect(0,0,button.width,button.height);
 	    button.graphics.endFill();
 	    trace( spec.helpMessage);
 	  } else if (!beenClicked) {
@@ -122,16 +162,16 @@ class MultipleChoice extends QuizProblem {
 	});
 
       return button;
-    }
-    
+    };
+
     for (i in 0...(this.choices.length)) {
       var b = choiceButton(i);
       choiceList.addChild( b );
     }
-
+    
     choiceList.y = problemPrompt.height + 10;
     addChild( choiceList );    
-        
+    
   }
   
   
