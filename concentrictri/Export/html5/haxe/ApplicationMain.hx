@@ -91,7 +91,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "58",
+			build: "82",
 			company: "Company Name",
 			file: "Concentrictri",
 			fps: 60,

@@ -45,7 +45,7 @@ ApplicationMain.init = function() {
 	if(total == 0) ApplicationMain.start();
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "58", company : "Company Name", file : "Concentrictri", fps : 60, name : "Concentrictri", orientation : "", packageName : "com.sample.concentrictri", version : "1.0.0", windows : [{ antialiasing : 0, background : 16777215, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 0, parameters : "{}", resizable : true, stencilBuffer : true, title : "Concentrictri", vsync : false, width : 0, x : null, y : null}]};
+	ApplicationMain.config = { build : "82", company : "Company Name", file : "Concentrictri", fps : 60, name : "Concentrictri", orientation : "", packageName : "com.sample.concentrictri", version : "1.0.0", windows : [{ antialiasing : 0, background : 16777215, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 0, parameters : "{}", resizable : true, stencilBuffer : true, title : "Concentrictri", vsync : false, width : 0, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -1354,30 +1354,40 @@ openfl_display_Sprite.prototype = $extend(openfl_display_DisplayObjectContainer.
 	,__properties__: $extend(openfl_display_DisplayObjectContainer.prototype.__properties__,{get_graphics:"get_graphics"})
 });
 var Main = function() {
+	var _g2 = this;
 	openfl_display_Sprite.call(this);
 	this.cosPi6 = Math.cos(Math.PI / 6);
 	this.sinPi6 = Math.sin(Math.PI / 6);
 	this.get_graphics().beginFill(0);
 	this.get_graphics().drawRect(0,0,this.stage.stageWidth,this.stage.stageHeight);
 	var container = new openfl_display_Sprite();
-	var outR = 70.0;
+	var outR = 100.0;
+	var sprites = [];
 	var _g = 0;
-	while(_g < 10) {
+	while(_g < 100) {
 		var a = _g++;
-		var _g1 = 0;
-		while(_g1 < 10) {
-			var b = _g1++;
-			var s = new openfl_display_Sprite();
-			s.get_graphics().lineStyle(4,16777215,1.0,true,1,0,2);
-			this.transUnit(s.get_graphics(),outR);
-			s.set_x((a + b) * (3 * outR * this.cosPi6));
-			s.set_y(a * (outR + outR * this.sinPi6) + b * -1 * (outR + outR * this.sinPi6));
-			container.addChild(s);
-		}
+		var s = new openfl_display_Sprite();
+		container.addChild(s);
+		sprites.push(s);
 	}
+	this.addChild(container);
 	container.set_y(250);
 	container.set_x(-500);
-	this.addChild(container);
+	this.addEventListener("enterFrame",function(e) {
+		var _g1 = 0;
+		while(_g1 < 10) {
+			var a1 = _g1++;
+			var _g11 = 0;
+			while(_g11 < 10) {
+				var b = _g11++;
+				var s1 = sprites[a1 * 10 + b];
+				s1.get_graphics().clear();
+				_g2.transUnit(s1.get_graphics(),outR);
+				s1.set_x((a1 + b) * (3 * outR * _g2.cosPi6));
+				s1.set_y(a1 * (outR + outR * _g2.sinPi6) + b * -1 * (outR + outR * _g2.sinPi6));
+			}
+		}
+	});
 };
 $hxClasses["Main"] = Main;
 Main.__name__ = ["Main"];
@@ -1388,7 +1398,11 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.drawTriangle(g,pts);
 	}
 	,drawTriangle: function(g,pts) {
+		var randstyle = function() {
+			g.lineStyle(1,Std["int"](Math.random() * 16777215),1.0,true,1,0,2);
+		};
 		g.moveTo(pts[0].x,pts[0].y);
+		randstyle();
 		g.lineTo(pts[1].x,pts[1].y);
 		g.lineTo(pts[2].x,pts[2].y);
 		g.lineTo(pts[0].x,pts[0].y);
@@ -1405,12 +1419,18 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 			var i = _g++;
 			if(i % 2 == 0) {
 				this.upwardsEqTri(g,cs[i].x,cs[i].y,r);
+				this.upwardsEqTri(g,cs[i].x,cs[i].y,r * 0.8);
 				this.upwardsEqTri(g,cs[i].x,cs[i].y,r * 0.6);
+				this.upwardsEqTri(g,cs[i].x,cs[i].y,r * 0.4);
 				this.upwardsEqTri(g,cs[i].x,cs[i].y,r * 0.2);
+				this.upwardsEqTri(g,cs[i].x,cs[i].y,r * 0.1);
 			} else {
 				this.downwardsEqTri(g,cs[i].x,cs[i].y,r);
+				this.downwardsEqTri(g,cs[i].x,cs[i].y,r * 0.8);
 				this.downwardsEqTri(g,cs[i].x,cs[i].y,r * 0.6);
+				this.downwardsEqTri(g,cs[i].x,cs[i].y,r * 0.4);
 				this.downwardsEqTri(g,cs[i].x,cs[i].y,r * 0.2);
+				this.downwardsEqTri(g,cs[i].x,cs[i].y,r * 0.1);
 			}
 		}
 	}
