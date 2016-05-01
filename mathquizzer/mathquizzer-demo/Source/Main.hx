@@ -19,6 +19,7 @@ class Main extends Sprite {
     // splashScreen();
     initQuiz();
     addNextButton();
+
   }
 
   private function loadProblem () {
