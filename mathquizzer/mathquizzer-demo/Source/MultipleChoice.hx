@@ -78,6 +78,7 @@ class MultipleChoice extends QuizProblem {
       tf.multiline = true;
       tf.defaultTextFormat = format;
       tf.text = spec.dispText;
+      tf.height = 25 * (spec.dispText.split("\n").length);
       textElements.push(tf);
     }
 
@@ -98,17 +99,8 @@ class MultipleChoice extends QuizProblem {
       var isClicked = false;
       
       var spec = choices[i];
-      // var tf = new TextField();
-      // tf.autoSize = openfl.text.TextFieldAutoSize.LEFT;
-      // tf.multiline = true;
-      // tf.defaultTextFormat = format;
-      // tf.text = spec.dispText;
-
-      // button.width = tf.width;
-      // button.height = tf.height;
 
       button.graphics.beginFill(0xffffff);
-      //      button.graphics.drawRect( 0, 0, button.width, button.height);
       button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
       button.graphics.endFill();
       
@@ -129,7 +121,6 @@ class MultipleChoice extends QuizProblem {
 	  if (!isClicked) {
 	    button.graphics.beginFill(0xdddddd); // MAGIC NUMBER!!:(
 	    button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
-	    //	    button.graphics.drawRect(0,0,button.width, button.height);
 	    button.graphics.endFill();
 	  }
 	});
@@ -139,7 +130,6 @@ class MultipleChoice extends QuizProblem {
 	  if (!isClicked) {
 	    button.graphics.beginFill(0xffffff); // MAGIC NUMBER :(
 	    button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
-	    //	    button.graphics.drawRect(0,0,button.width, button.height);
 	    button.graphics.endFill();
 	  }
 	});
@@ -150,7 +140,6 @@ class MultipleChoice extends QuizProblem {
 	    isClicked = true;	// don't let unclicking of correct answers.
 	    button.graphics.beginFill(0xAAFFAA);
 	    button.graphics.drawRect( 0, 0, maxWidth, maxHeight);
-	    //	    button.graphics.drawRect(0,0,button.width,button.height);
 	    button.graphics.endFill();
 	    trace( spec.helpMessage);
 	  } else if (!beenClicked) {

@@ -101,20 +101,16 @@ class Main extends Sprite {
     // quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
 
     quiz.push( new MultipleChoice( errorLog,
-				   [{dispText: "option1\nmore on option 1\nmore",
+				   [{dispText: "Addition\nSubtraction\nMultiplication\nDivision",
 					 isCorrect: false,
-					 helpMessage: "Do better!",
-					 diagnosticMessage: "Errortype1"},
-				     {dispText: "option2",
+					 helpMessage: "Multiplication should be before addition",
+					 diagnosticMessage: ""},
+				     {dispText: "Parentheses\nExponents\nMultiplication\nDivision\nAddition\nSubtraction",
 				     	 isCorrect: true,
-				     	 helpMessage: "",
-				     	 diagnosticMessage: ""},
-				     {dispText: "option3\nmore\nmore more",
-				     	 isCorrect: false,
-				     	 helpMessage: "get it right next time",
-				     	 diagnosticMessage: "errortype2"}
+				     	 helpMessage: "Correct!",
+				     	 diagnosticMessage: ""}
 				     ],
-				   "This is a test", false, true));
+				   "5 + 9 ✕ 3 + 7", false, true));
 
     Util.randomize( quiz );
     
