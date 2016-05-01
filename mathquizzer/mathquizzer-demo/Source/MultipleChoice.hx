@@ -41,21 +41,26 @@ class MultipleChoice extends QuizProblem {
   }
 
   private function buildImagePrompt (prompt : String) {
-    openfl.Assets.loadBitmapData(prompt).onComplete(function (bmpdat) {
-	var bmp = new openfl.display.Bitmap( bmpdat);
-	problemPrompt.addChild(bmp);
-      });
+    // openfl.Assets.loadBitmapData(prompt).onComplete(function (bmpdat) {
+    // 	var bmp = new openfl.display.Bitmap( bmpdat);
+    // 	trace("loaded");
+    // 	problemPrompt.addChild(bmp);
+    //   });
+
+    var bmp = new openfl.display.Bitmap( openfl.Assets.getBitmapData(prompt) );
+    problemPrompt.addChild( bmp );
   }
 
   private function buildTextPrompt (prompt : String) {
     var format = new TextFormat();
-    format.size = 40;
+    format.size = 30;
     format.color = 0;
 
     var tf = new TextField();
     tf.defaultTextFormat = format;
     tf.selectable = false;
-    tf.autoSize = openfl.text.TextFieldAutoSize.CENTER;
+    tf.autoSize = openfl.text.TextFieldAutoSize.LEFT;
+    tf.multiline = true;
     tf.text = prompt;
 
     problemPrompt.addChild( tf );

@@ -26,6 +26,8 @@ class Main extends Sprite {
     if (quizIndex < quiz.length) {
       addChild(quiz[quizIndex]);
       centerInStage(quiz[quizIndex]);
+      removeChild(nextButton);
+      addChild(nextButton);
     }
     if (quizIndex >= quiz.length) {
       removeChild(nextButton);
@@ -38,7 +40,7 @@ class Main extends Sprite {
     var repCont = new Sprite();
     var vdisp = 0;
     var format = new TextFormat();
-    format.size = 35;
+    format.size = 25;
     format.color = 0;
     
     for (txt in rep) {
@@ -96,23 +98,155 @@ class Main extends Sprite {
   
   private function initQuiz () {
     quiz = [];
-    // quiz.push( new AdditionProblem( errorLog, [3321,4531,32] ));    
-    // quiz.push( new AdditionProblem( errorLog, [7543, 3235] ));
-    // quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
+    quiz.push( new AdditionProblem( errorLog, [3321,4531,32] ));    
+    quiz.push( new AdditionProblem( errorLog, [7543, 3235] ));
+    quiz.push( new AdditionProblem( errorLog, [123,234,345] ));
 
     quiz.push( new MultipleChoice( errorLog,
-				   [{dispText: "Addition\nSubtraction\nMultiplication\nDivision",
-					 isCorrect: false,
-					 helpMessage: "Multiplication should be before addition",
-					 diagnosticMessage: ""},
-				     {dispText: "Parentheses\nExponents\nMultiplication\nDivision\nAddition\nSubtraction",
-				     	 isCorrect: true,
-				     	 helpMessage: "Correct!",
-				     	 diagnosticMessage: ""}
-				     ],
-				   "5 + 9 ✕ 3 + 7", false, true));
+    				   [{dispText: "Addition\nSubtraction\nMultiplication\nDivision",
+    					 isCorrect: false,
+    					 helpMessage: "Multiplication should be before addition",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Parentheses\nExponents\nMultiplication\nDivision\nAddition\nSubtraction",
+    				     	 isCorrect: true,
+    				     	 helpMessage: "Correct!",
+    				     	 diagnosticMessage: ""}
+    				     ],
+    				   "For this problem: 5 + 9 ✕ 3 + 7\nWhat is the correct order of operations?", false, true));
 
-    Util.randomize( quiz );
+    quiz.push( new MultipleChoice( errorLog,
+    				   [{dispText: "Addition",
+    					 isCorrect: false,
+    					 helpMessage: "Multiplication should be before addition",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Subtraction",
+    					 isCorrect: false,
+    					 helpMessage: "No subtraction in this problem.",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Division",
+    					 isCorrect: false,
+    					 helpMessage: "There is no division here",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Multiplication",
+    					 isCorrect: true,
+    					 helpMessage: "Correct!",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Parentheses",
+    					 isCorrect: false,
+    					 helpMessage: "No parentheses in this problem.",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Exponents",
+    					 isCorrect: false,
+    					 helpMessage: "No exponents in this problem",
+    					 diagnosticMessage: "order of operations"}
+    				     ],
+    				   "For this problem: 5 + 9 ✕ 3 + 7\nWhich operation comes first?"));
+
+    quiz.push( new MultipleChoice( errorLog,
+    				   [{dispText: "Addition",
+    					 isCorrect: true,
+    					 helpMessage: "Correct!",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Subtraction",
+    					 isCorrect: false,
+    					 helpMessage: "No subtraction in this problem.",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Division",
+    					 isCorrect: false,
+    					 helpMessage: "There is no division here",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Multiplication",
+    					 isCorrect: false,
+    					 helpMessage: "No multiplication left to do.",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Parentheses",
+    					 isCorrect: false,
+    					 helpMessage: "No parentheses in this problem.",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Exponents",
+    					 isCorrect: false,
+    					 helpMessage: "No exponents in this problem",
+    					 diagnosticMessage: "order of operations"}
+    				     ],
+    				   "For this problem: 5 + 9 ✕ 3 + 7 becomes 5 + 27 + 7\nWhat operation comes next?"));
+
+        quiz.push( new MultipleChoice( errorLog,[
+    				     {dispText: "Add left to right",
+    					 isCorrect: true,
+    					 helpMessage: "Correct.",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "Add largest numbers first",
+    					 isCorrect: false,
+    					 helpMessage: "Nope, you should add left to right",
+    					 diagnosticMessage: "order of operations"}
+				       
+    				     ],
+    				   "In 5 + 27 + 7, what is the rule \nfor order of addition?"));    
+
+        quiz.push( new MultipleChoice( errorLog,[
+    				     {dispText: "39",
+    					 isCorrect: true,
+    					 helpMessage: "Correct.",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "49",
+    					 isCorrect: false,
+    					 helpMessage: "Remeber order of operations, multiplication comes first",
+    					 diagnosticMessage: "order of operations"},
+    				     {dispText: "95",
+    					 isCorrect: false,
+    					 helpMessage: "Nope, you should add left to right",
+    					 diagnosticMessage: "remember order of operations, multiplication comes first"}
+    				     ],
+    				   "So what is 5 + 9 ✕ 3 + 7 ?"));
+
+	quiz.push( new MultipleChoice( errorLog,
+				       [{dispText: "Yes", isCorrect: false, helpMessage: "the denominator is on the bottom of a fraction",
+					     diagnosticMessage: "fractions error"},
+					 {dispText: "No", isCorrect: true, helpMessage: "correct!", diagnosticMessage:""}],
+				       "assets/fractions1.png", true));
+
+	quiz.push( new MultipleChoice( errorLog,
+				       [{dispText: "find the greatest common multiple", isCorrect: false, helpMessage: "try again",
+					     diagnosticMessage: "fractions error"},
+					{dispText: "find the least common denominator", isCorrect: true, helpMessage: "Correct",
+					     diagnosticMessage: ""},
+					{dispText: "add the numerators and denominators together", isCorrect: false, helpMessage: "denominators must be the same",
+					     diagnosticMessage: "fractions error"},
+					 ],
+				       "assets/fractions2.png", true));
+
+	quiz.push( new MultipleChoice( errorLog,
+				       [{dispText: "12 is the LCD", isCorrect: true, helpMessage: "Correct",
+					     diagnosticMessage: ""},
+					 {dispText: "2 is the LCD", isCorrect: false, helpMessage: "the LCD is the least common multiple of the denominators",
+					     diagnosticMessage: "fractions error"}
+					 ],
+				       "assets/fractions3.png", true));
+
+	quiz.push( new MultipleChoice( errorLog,
+				       [{dispText: "108°", isCorrect: false, helpMessage: "this is not an equilateral pentagon",
+					     diagnosticMessage: "polygon facts error"},
+					 {dispText: "95°", isCorrect: false, helpMessage: "these angles are not supplementary",
+					     diagnosticMessage: "polygon facts error"},
+					 {dispText: "163°", isCorrect: true, helpMessage: "Correct",
+					     diagnosticMessage: ""}
+					 ],
+				       "assets/geom1.png", true, true));
+
+	quiz.push( new MultipleChoice( errorLog,
+				       [{dispText: "80°", isCorrect: false, helpMessage: "corresponding angels are congruent",
+					     diagnosticMessage: "parallel lines error"},
+					 {dispText: "100°", isCorrect: true, helpMessage: "Correct",
+					     diagnosticMessage: ""},
+					 {dispText: "110°", isCorrect: false, helpMessage: "corresponding angels are congruent",
+					     diagnosticMessage: "parallel lines error"},
+					 {dispText: "140°", isCorrect: false, helpMessage: "corresponding angels are congruent",
+					     diagnosticMessage: "parallel lines error"}
+					 ],
+				       "assets/angles1.png", true, true));
+
+
+    //    Util.randomize( quiz );
     
     addChild(quiz[0]);
     centerInStage(quiz[0]);
