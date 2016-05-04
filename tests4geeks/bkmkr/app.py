@@ -56,7 +56,7 @@ def add_link():
 def search_title():
     link_data = LinksClient.search_title(request.args['q'])
     resp = jsonify(link_data)
-    resp.response_code = 200
+    resp.status_code = 200
     return resp 
 
 @app.route('/markread/<linkid>')
@@ -65,10 +65,12 @@ def mark_read(linkid):
         linkdoc = LinksClient.find_one( ObjectId(linkid) )
         if linkdoc:
             resp = jsonify(linkdoc.to_json_view())
-            resp.response_code = 200
+            resp.status_code = 200
             return resp
         else:
-            return "UH OH"
+            resp = jsonify({'error' : 'no such document: ' + linkid})
+            resp.status_code = 404
+            return resp
     except InvalidId:
         return "Bad Input"
 
