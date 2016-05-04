@@ -34,7 +34,7 @@ class ArticleLink(Document):
                 'readStatus' : self.get_read_status()}
 
     def update_read_status(self, status):
-        self.readStatus = status
+        self["readStatus"] = status
         self.save()
 
     # TODO: show off 
@@ -47,9 +47,10 @@ class ArticleLinks(Collection):
         data = self.find({"$text" : {"$search" : qs}})            
         return {'links' : [d.to_json_view() for d in data]}
 
-    def tagged(self, tags):
-        data = self.find({'tags' : {'$in' : tags}});
-        return {'links' : [d.to_json_view() for d in data]}
+    def just_unread(self):
+        data = self.find({"$or" : [{"readStatus" : False},
+                                   {"readStatus" : {"$exists" : False}}]})
+        return {'links': [d.to_json_view() for d in data]}
 
 
 app = Flask(__name__)
@@ -95,6 +96,13 @@ def mark_read(linkid):
     except InvalidId:
         return "Bad Input"
 
+@app.route('/unread')
+def list_unread():
+    link_data = LinksClient.just_unread()
+    resp = jsonify(link_data)
+    resp.status_code = 200
+    return resp
+    
 if __name__ == '__main__':
     app.debug = True
     app.run()
