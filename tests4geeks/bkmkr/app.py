@@ -33,9 +33,10 @@ class ArticleLink(Document):
                 'title' : self.get_title(),
                 'readStatus' : self.get_read_status()}
 
-    def update_read_status(self, status):
-        self["readStatus"] = status
+    def toggle_read_status(self):
+        self["readStatus"] = not self.get_read_status()
         self.save()
+        return self.to_json_view()
 
     # TODO: show off 
 
@@ -51,10 +52,9 @@ class ArticleLinks(Collection):
         return {'links' : [d.to_json_view() for d in data]}
 
     def just_unread(self):
-        data = self.find({"$or" : [{"readStatus" : False},
+        return self.find({"$or" : [{"readStatus" : False},
                                    {"readStatus" : {"$exists" : False}}]})
-        return {'links': [d.to_json_view() for d in data]}
-
+        
 
 app = Flask(__name__)
 
@@ -87,14 +87,13 @@ def search_title():
     resp.status_code = 200
     return resp 
 
-@app.route('/markread/<linkid>', methods=['POST'])
-def mark_read(linkid):
-    read_status = request.json['readStatus']    
+@app.route('/toggleread/<linkid>')
+def toggle_read(linkid):
     try:
         linkdoc = LinksClient.find_one( ObjectId(linkid) )
         if linkdoc:
-            linkdoc.update_read_status( read_status )
-            resp = jsonify({'result' : 'status updated'})
+            json_resp = linkdoc.toggle_read_status()            
+            resp = jsonify(json_resp)
             resp.status_code = 200
             return resp
         else:
@@ -104,12 +103,12 @@ def mark_read(linkid):
     except InvalidId:
         return "Bad Input"
 
+
+
 @app.route('/unread')
 def list_unread():
     link_data = LinksClient.just_unread()
-    resp = jsonify(link_data)
-    resp.status_code = 200
-    return resp
+    return render_template('index.html', links=link_data)
     
 if __name__ == '__main__':
     app.debug = True
