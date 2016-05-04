@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, json, request, Response
+from flask import Flask, jsonify, json, request, Response, render_template
 
 
 # imports for working with mongo from python
@@ -43,6 +43,9 @@ class ArticleLink(Document):
 class ArticleLinks(Collection):
     document_class = ArticleLink
 
+    def find_all(self):
+        return self.find()
+    
     def search_title(self, qs):
         data = self.find({"$text" : {"$search" : qs}})            
         return {'links' : [d.to_json_view() for d in data]}
@@ -59,6 +62,11 @@ client = MongoClient()
 LinksClient = ArticleLinks(collection=client.dirt.links)
 
 @app.route('/')
+def index():
+    data = LinksClient.find_all()
+    return render_template('index.html', links=data)
+
+@app.route('/all')
 def list_article_links():
     data = LinksClient.find()
     jsondata = {'links' : [d.to_json_view() for d in data]}

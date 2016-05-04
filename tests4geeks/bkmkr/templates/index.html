@@ -1,0 +1,29 @@
+<!doctype html>
+<title>bkmkr</title>
+<body>
+
+  <div class='header'>
+    <h4> Add Bookmark </h4>
+    <form>
+      <label for="url">URL</label>
+      <input name="url"/>
+      <label for="title">Link Title</label>
+      <input name="title"/>
+    </form>
+  </div>
+
+  <div class='searcbox'>
+    <label for="search">Search Titles</label>
+    <input name="search"/>
+  </div>
+
+  <div class="listing">
+    <ul>
+    {% for link in links %}
+    <li class="readstatus_{{ link['readStatus'] }}">
+      <a href="{{ link['link'] }}">  {{ link['title'] }} </a>
+    </li>
+    {% endfor %}      
+  </div>
+  
+</body>
