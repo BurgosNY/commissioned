@@ -48,8 +48,7 @@ class ArticleLinks(Collection):
         return self.find()
     
     def search_title(self, qs):
-        data = self.find({"$text" : {"$search" : qs}})            
-        return {'links' : [d.to_json_view() for d in data]}
+        return self.find({"$text" : {"$search" : qs}})            
 
     def just_unread(self):
         return self.find({"$or" : [{"readStatus" : False},
@@ -83,9 +82,7 @@ def add_link():
 @app.route('/search')
 def search_title():
     link_data = LinksClient.search_title(request.args['q'])
-    resp = jsonify(link_data)
-    resp.status_code = 200
-    return resp 
+    return render_template('index.html', links=link_data)
 
 @app.route('/toggleread/<linkid>')
 def toggle_read(linkid):
