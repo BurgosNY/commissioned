@@ -12,11 +12,30 @@ from bson.errors import InvalidId
 # you define hooks and validators
 
 class ArticleLink(Document):
+    def get_link(self):
+        return self['link']
+
+    def get_title(self):
+        if 'title' in self.keys():
+            return self['title']
+        else:
+            return 'untitled'
+
+    def get_read_status(self):
+        if 'readStatus' in self.keys():
+            return self['readStatus']
+        else:
+            return False
+
     def to_json_view(self):
         return {'_id' : str(self['_id']),
-                'link': self['link'],
-                'title' : self['title']}
+                'link': self.get_link(),
+                'title' : self.get_title(),
+                'readStatus' : self.get_read_status()}
 
+    def update_read_status(self, status):
+        self.readStatus = status
+        self.save()
 
     # TODO: show off 
 
@@ -59,12 +78,14 @@ def search_title():
     resp.status_code = 200
     return resp 
 
-@app.route('/markread/<linkid>')
+@app.route('/markread/<linkid>', methods=['POST'])
 def mark_read(linkid):
+    read_status = request.json['readStatus']    
     try:
         linkdoc = LinksClient.find_one( ObjectId(linkid) )
         if linkdoc:
-            resp = jsonify(linkdoc.to_json_view())
+            linkdoc.update_read_status( read_status )
+            resp = jsonify({'result' : 'status updated'})
             resp.status_code = 200
             return resp
         else:
