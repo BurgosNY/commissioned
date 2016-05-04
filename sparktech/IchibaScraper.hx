@@ -1,4 +1,7 @@
 
+import thx.csv.Csv;
+import haxe.Http;
+
 
 class IchibaScraper {
 
