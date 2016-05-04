@@ -3,6 +3,16 @@
 <body>
 
   <div>
+    <form action="/add" method="POST">
+      <label for="add_url">Add Url</label>
+      <input name="add_url"/>
+      <label for="add_title">Add Link Title</label>
+      <input name="add_title"/>
+      <input type="submit" value="Add Link"/>
+    </form>
+  </div>
+  
+  <div>
     <a href="/unread"> Unread Links </a>
     <span> | </span>
     <a href="/"> All Links </a>

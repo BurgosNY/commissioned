@@ -75,9 +75,12 @@ def list_article_links():
 
 @app.route('/add', methods=['POST'])
 def add_link():
-    data = request.json 
+    #    data = request.json
+    data = {'link' : request.form['add_url'],
+            'title' : request.form['add_title']}
     LinksClient.insert_one( data )
-    return Response( "OK", status=200 )
+    #    return Response( "OK", status=200 )
+    return index()
 
 @app.route('/search')
 def search_title():
