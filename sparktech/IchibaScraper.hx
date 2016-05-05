@@ -2,15 +2,8 @@
 import thx.csv.Csv;
 import haxe.Http;
 import sys.io.File;
+import htmlparser.HtmlDocument;
 
-
-/*
-
-  Output format for ichibastatus.csv:
-
-  Product Code, Status, Last Checked, Check Successful?
-
- */
 
 typedef ProductStatus = {
  productCode : String,
@@ -21,6 +14,14 @@ typedef ProductStatus = {
 
 class IchibaScraper {
 
+
+  private static var USER_AGENTS =
+    ["Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0",
+     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36",
+     
+     
+				    ];
+  private static var POLITENESS_PERIOD = 5.0;
   private static var defautInFile : String = "ichibalinks.txt";
   private static var defaultOutFile : String = "ichibastatus.csv";
 
@@ -28,16 +29,7 @@ class IchibaScraper {
 
   public static function main () {
     var links = processLinkFile( defautInFile );
-    var productStatuses = scrapeLinks( links );
-    try {
-      var r1 = Http.requestUrl("https://www.python.org");
-      trace(r1.length);
-      var r2 = Http.requestUrl("http://not.exists.io");
-      trace(r2.length);
-    } catch (e : Dynamic) {
-      trace(e);
-    }
-    
+    var productStatuses = scrapeLinks( [links[0]] );
   }
 
   private static function processLinkFile(f : String) {
@@ -57,15 +49,19 @@ class IchibaScraper {
 
   private static function scrapeLinks ( links : Array<String> ) {
     var ps : Array<ProductStatus> = [];
-    for (link in links) {
-      var date = Date.now();
+    for (l in links) {
+      var d = Date.now();
       try {
+	trace('trying to get $l');
 	var pagetext = Http.requestUrl( l );
+	trace('got it');
 	var status = scrapeStatus( pagetext );
+	trace('scrapped status');
 	ps.push( mkProductStatus( l, status, d) );
       } catch (e : Dynamic) {
 	ps.push( errorCheckingLink( l , d ));
       }
+      Sys.sleep( POLITENESS_PERIOD);
     }
     return ps;
   }
@@ -86,8 +82,11 @@ class IchibaScraper {
 	status: s, lastChecked: d, checkSucessful: true};
   }
 
-  private static function scrapeStatus( txt : String ) {
-    
+  private static function scrapeStatus( htmltext : String ) {
+    var doc = new HtmlDocument( htmltext, true );
+    var found = doc.find("meta");
+    trace(found);
+    return "";
   }
   
 }
