@@ -1,10 +1,6 @@
 
 This directory contains the code listing for a
-<<<<<<< HEAD
 [tutorial](https://tests4geeks.com/tutorials/mongodb-tutorial-mongokat-pymongo/) 
-=======
-[tutorial](https://tests4geeks.com/tutorials/mongodb-tutorial-mongokat-pymongo/)
->>>>>>> tests4geeks
 on [test4geeks.com](http://tests4geeks.com/blog) about using
 [MongoDB](http://mongodb.org) in your Python projects. 
 
