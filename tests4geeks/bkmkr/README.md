@@ -1,6 +1,6 @@
 
 This directory contains the code listing for a
-[tutorial](https://tests4geeks.com/tutorials/mongodb-tutorial-with-mongokat-and-pymongo)
+[tutorial](https://tests4geeks.com/tutorials/mongodb-tutorial-mongokat-pymongo/)
 on [test4geeks.com](http://tests4geeks.com/blog) about using
 [MongoDB](http://mongodb.org) in your Python projects. 
 
