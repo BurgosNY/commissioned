@@ -11,7 +11,7 @@ from bson.errors import InvalidId
 # methods for you database collections.  The Document class also lets
 # you define hooks and validators
 
-class ArticleLink(Document):
+class LinkDocument(Document):
     def get_link(self):
         return self['link']
 
@@ -38,11 +38,9 @@ class ArticleLink(Document):
         self.save()
         return self.to_json_view()
 
-    # TODO: show off 
 
-
-class ArticleLinks(Collection):
-    document_class = ArticleLink
+class LinksCollection(Collection):
+    document_class = LinkDocument
 
     def find_all(self):
         return self.find()
@@ -58,7 +56,7 @@ class ArticleLinks(Collection):
 app = Flask(__name__)
 
 client = MongoClient()
-LinksClient = ArticleLinks(collection=client.dirt.links)
+LinksClient = LinksCollection(collection=client.dirt.links)
 
 @app.route('/')
 def index():
