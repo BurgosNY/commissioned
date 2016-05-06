@@ -72,19 +72,19 @@ class IchibaScraper {
 
       r.onData = function (pagetext) {
 	var status = scrapeStatus( pagetext );
-	trace('${productCodeFromUrl(l)} : $status');
+	Sys.print('${productCodeFromUrl(l)} : $status\n');
 	ps.push( mkProductStatus( l, status, d) );
       };
 
       r.onError = function (e) {
-	trace('http error: $e for link $l');
+	Sys.print('http error: $e for link $l\n');
 	ps.push( errorCheckingLink( l, d) );
       };
 
       try {
 	r.request( false );
       } catch (e : Dynamic) {
-	trace('error: $e for link $l');
+	Sys.print('error: $e for link $l\n');
 	ps.push( errorCheckingLink( l, d) );
       }
       
