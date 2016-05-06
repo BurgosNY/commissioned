@@ -30,7 +30,7 @@ class IchibaScraper {
     return USER_AGENTS[Std.int(Math.floor(USER_AGENTS.length * Math.random()))];
   }
 
-  public static var POLITENESS_PERIOD = 5.0;
+  public static var POLITENESS_PERIOD = 3.5;
   public static var defautInFile : String = "ichibalinks.txt";
   public static var defaultOutFile : String = "ichibastatus.csv";
 
@@ -38,14 +38,16 @@ class IchibaScraper {
 
   public static function main () {
     var links = processLinkFile( defautInFile );
-    var productStatuses = scrapeLinks( links.slice(0,5) );
+    var productStatuses = scrapeLinks( links );
     var builtCSV = statusToCSV( productStatuses );
     File.saveContent( defaultOutFile, csvHeaders + builtCSV);    
   }
 
   public static function processLinkFile(f : String) {
     var contents = File.getContent( f );
-    return contents.split("\n").map(StringTools.trim);    
+    return contents.split("\n").map(StringTools.trim).filter(function (s) {
+	return StringTools.startsWith(s, "http://");
+      });    
   }
 
   public static function statusToCSV (ss : Array<ProductStatus>) {
@@ -70,12 +72,12 @@ class IchibaScraper {
 
       r.onData = function (pagetext) {
 	var status = scrapeStatus( pagetext );
-	trace('got status $status');
+	trace('${productCodeFromUrl(l)} : $status');
 	ps.push( mkProductStatus( l, status, d) );
       };
 
       r.onError = function (e) {
-	trace('error: $e for link $l');
+	trace('http error: $e for link $l');
 	ps.push( errorCheckingLink( l, d) );
       };
 
@@ -113,7 +115,7 @@ class IchibaScraper {
     for (f in found) 
       if (f.getAttribute('itemprop') == 'availability')
 	return f.getAttribute('content');
-    return "unknown";
+    return "Out Of Stock";
   }
   
 }
